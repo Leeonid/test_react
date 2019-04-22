@@ -6,7 +6,7 @@ export const convertItems = (items, oldItems) => {
         if (oldItems && oldItems[i]) {
             const oldConv = oldItems[i][0].split('.');
             for (let j = 0; j < item.conv.length; j++) {
-                item.convFlag[j] = oldConv[j].indexOf(item.conv[j]) == 0 ? 'hHLfPw' : '';
+                item.convFlag[j] = oldConv[j].indexOf(item.conv[j]) == 0 ? 'opacity50' : '';
             }
         }
     });

@@ -28,7 +28,7 @@ class OrderBookDiffs extends Component {
             return <p>Loading…</p>;
         }
 
-        let items = this.props.items;
+        const {items} = this.props;
 
         if (items && Object.keys(items).length > 0) {
             let priceNow = Number(items.items.c).toFixed(2),

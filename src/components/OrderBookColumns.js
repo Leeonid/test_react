@@ -9,7 +9,7 @@ export default class OrderBookColumns extends Component {
                     <div className="dfSBRW" key={index}>
                         <div className={this.props.class}>
                             <span className={item.convFlag[0]}>{item.conv[0]}</span>
-                            <span className="hHLfPw">.</span>
+                            <span className="opacity50">.</span>
                             <span className={item.convFlag[1]}>{item.conv[1]}</span>
                         </div>
                         <div className="div33">{item[1]}</div>

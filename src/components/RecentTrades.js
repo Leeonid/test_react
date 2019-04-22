@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {itemsFetchData} from '../actions/index';
+import moment from 'moment';
 
 const mapStateToProps = (state) => {
     return {
@@ -28,16 +29,13 @@ class RecentTrades extends Component {
             return <p>Loading…</p>;
         }
 
-        let items = this.props.items;
+        const {items} = this.props;
 
-        if (items && items.items && items.items.length > 2) {
+        if (!!items.items && items.items.length > 2) {
             let newItem = items.items[0],
-                currentTime = new Date(newItem.E),
-                h = currentTime.getHours(),
-                m = currentTime.getMinutes(),
-                s = currentTime.getSeconds();
+                currentTime = moment.unix(newItem.E);
 
-            newItem['time'] = ((h < 10 ? "0" : "") + h) + ':' + ((m < 10 ? "0" : "") + m) + ':' + ((s < 10 ? "0" : "") + s);
+            newItem['time'] = currentTime.format('hh:mm:ss');
             newItem['reg'] = false;
             newItem['green'] = false;
 
@@ -56,7 +54,7 @@ class RecentTrades extends Component {
             }
         }
 
-        if (items && items.items && items.items.length > 22) {
+        if (!!items.items &&items.items.length > 22) {
             return (
                 <div className="pTop6">
                     {
@@ -66,7 +64,7 @@ class RecentTrades extends Component {
                                     <span className={item.green ? 'green' : 'red'}>{Number(item.p).toFixed(2)}</span>
                                 </div>
                                 <div className="div33">{item.q}</div>
-                                <div className="div33 hHLfPw">{item.time}</div>
+                                <div className="div33 opacity50">{item.time}</div>
                             </div>
                         ))
                     }
