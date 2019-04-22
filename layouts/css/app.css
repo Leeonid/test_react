@@ -1,0 +1,72 @@
+* {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+body {
+    background: rgb(38, 45, 51);
+}
+
+.textRight {
+    text-align:right;
+}
+
+.pTop6 {
+    padding-top: 6px;
+}
+
+.padding5 {
+    padding: 5px;
+}
+
+.fs18, .fs18 * {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.df {
+    display: flex;
+}
+
+.dfSBRW {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+}
+
+.div33 {
+    width: 33%;
+}
+
+.div50 {
+    color: rgb(212, 212, 212);
+    padding: 0 5px 0 5px;
+    width: 50%;
+    border: solid black 4px;
+    box-sizing: border-box;
+}
+
+.div50:last-child {
+    border-left: 0;
+}
+
+.head {
+    color: #999;
+    padding-bottom: 5px;
+}
+
+.pink {
+    color: rgb(255, 0, 122);
+}
+
+.hHLfPw {
+    opacity: 0.5;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: rgb(112, 168, 0);
+}
