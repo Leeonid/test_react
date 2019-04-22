@@ -11,14 +11,12 @@ export function socketConnecting(state = false, action) {
 export function socketsOnMessageOrderBook(state = {}, action) {
     switch (action.type) {
         case 'SOCKETS_ON_MESSAGE_ORDER_BOOK':
-            let returns = {};
-
-            returns['asks'] = action.items.asks;
-            returns['bids'] = action.items.bids;
-            returns['oldAsks'] = state.asks ? state.asks : {};
-            returns['oldBids'] = state.bids ? state.bids : {};
-
-            return returns;
+            return {
+                asks: action.items.asks,
+                bids: action.items.bids,
+                oldAsks: {...state.asks, ...{}},
+                oldBids: {...state.bids, ...{}},
+            };
 
         default:
             return state;
@@ -28,12 +26,10 @@ export function socketsOnMessageOrderBook(state = {}, action) {
 export function socketsOnMessageOrderBookDiffs(state = {}, action) {
     switch (action.type) {
         case 'SOCKETS_ON_MESSAGE_ORDER_BOOK_DIFFS':
-            let returns = {};
-
-            returns['items'] = action.items && action.items.data ? action.items.data : {};
-            returns['oldItems'] = state.items ? state.items : {};
-
-            return returns;
+            return {
+                items: {...action.items.data, ...{}},
+                oldItems: {...state.items, ...{}}
+            };
 
         default:
             return state;
@@ -43,39 +39,12 @@ export function socketsOnMessageOrderBookDiffs(state = {}, action) {
 export function socketsOnMessageRecentTrades(state = {}, action) {
     switch (action.type) {
         case 'SOCKETS_ON_MESSAGE_RECENT_TRADES':
-            let returns = {};
+            let returns = {
+                items: state.items ? state.items : []
+            };
 
-            returns['items'] = state.items ? state.items : [];
-            let newItem = {},
-                currentTime = new Date(action.items.data.E),
-                h = currentTime.getHours(),
-                m = currentTime.getMinutes(),
-                s = currentTime.getSeconds();
-
-            newItem['time'] = ((h < 10 ? "0" : "") + h) + ':' + ((m < 10 ? "0" : "") + m) + ':' + ((s < 10 ? "0" : "") + s);
-            newItem['q'] = action.items.data.q;
-            newItem['p'] = Number(action.items.data.p).toFixed(2);
-            newItem['reg'] = false;
-            newItem['green'] = false;
-
-            let lastItem = returns['items'][0] ? returns['items'][0] : false;
-            if (lastItem && lastItem.p) {
-                if (Number(lastItem.p) < Number(newItem['p'])) {
-                    newItem['green'] = true;
-                } else if (Number(lastItem.p) > Number(newItem['p'])) {
-                    newItem['reg'] = true;
-                } else {
-                    newItem['green'] = lastItem['green'];
-                    newItem['reg'] = lastItem['reg'];
-                }
-            } else {
-                newItem['green'] = true;
-            }
-
-            let length = returns['items'].unshift(newItem);
-
-            if (length > 23) {
-                returns['items'].pop();
+            if (returns.items.unshift(action.items.data) > 23) {
+                returns.items.pop()
             }
 
             return returns;

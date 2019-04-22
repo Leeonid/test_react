@@ -44,8 +44,8 @@ function itemsIsLoading(bool) {
 }
 
 function createSource(url) {
-    let source = new WebSocket(url);
-    let deferred;
+    let source = new WebSocket(url),
+        deferred;
 
     source.onmessage = event => {
         if(deferred) {
