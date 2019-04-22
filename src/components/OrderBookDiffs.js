@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {itemsFetchData} from '../actions/index';
+import Messages from "./Messages";
+
+const typeBlock = 'OrderBookDiffs';
 
 const mapStateToProps = (state) => {
     return {
-        hasErrored: state.socketsHasError,
-        isConnect: state.socketConnecting,
+        hasErrored: state.socketsHasError[typeBlock],
+        isConnect: state.socketConnecting[typeBlock],
         items: state.socketsOnMessageOrderBookDiffs
     };
 };
@@ -14,18 +16,14 @@ class OrderBookDiffs extends Component {
     componentDidMount() {
         this.props.dispatch({
             type: 'SOCKET_INIT',
-            from: 'OrderBookDiffs',
+            from: typeBlock,
             url: 'wss://stream.binance.com:9443/stream?streams=btcusdt@miniTicker'
         });
     }
 
     render() {
-        if (this.props.hasErrored) {
-            return <p>Sorry! There was an error loading the items</p>;
-        }
-
-        if (this.props.isConnect) {
-            return <p>Loading…</p>;
+        if (this.props.hasErrored || this.props.isConnect) {
+            return <Messages {...this.props} />;
         }
 
         const {items} = this.props;

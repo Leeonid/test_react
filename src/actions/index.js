@@ -1,17 +1,25 @@
 import { put, call, takeEvery, fork } from 'redux-saga/effects'
 
-function socketsConnecting(bool) {
+function socketsConnecting(bool, string) {
     return {
         type: 'SOCKETS_CONNECTING',
-        isConnect: bool
+        isConnect: bool,
+        from: string
     };
 }
 
-function socketsOnMessageOrderBook(items, from) {
+function socketsHasError(error, string) {
+    return {
+        type: 'SOCKETS_HAS_ERROR',
+        error: error
+    };
+}
+
+function socketsOnMessageOrderBook(items, string) {
     return {
         type: 'SOCKETS_ON_MESSAGE_ORDER_BOOK',
         items: items,
-        from: from,
+        from: string,
     };
 }
 
@@ -26,20 +34,6 @@ function socketsOnMessageRecentTrades(items) {
     return {
         type: 'SOCKETS_ON_MESSAGE_RECENT_TRADES',
         items: items
-    };
-}
-
-function socketsHasError(error) {
-    return {
-        type: 'SOCKETS_HAS_ERROR',
-        error: error
-    };
-}
-
-function itemsIsLoading(bool) {
-    return {
-        type: 'ITEMS_IS_LOADING',
-        isLoading: bool
     };
 }
 
@@ -72,7 +66,7 @@ export function* watchFetchData() {
 function* watchMessages(msgSource, from) {
     let txs = yield call(msgSource.nextMessage);
 
-    yield put(socketsConnecting(false));
+    yield put(socketsConnecting(false, from));
 
     let y = true;
     while(txs) {
@@ -84,12 +78,11 @@ function* watchMessages(msgSource, from) {
 
 export function* socketInit(action) {
     try {
-        yield put(itemsIsLoading(true));
-        yield put(socketsConnecting(true));
+        yield put(socketsConnecting(true, action.from));
         const msgSource = yield call(createSource, action.url);
         yield fork(watchMessages, msgSource, action.from);
     } catch (error) {
         console.log(error);
-        //yield put(socketsHasError(true))
+        yield put(socketsHasError(true, action.from))
     }
 }

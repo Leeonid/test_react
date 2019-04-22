@@ -1,25 +1,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {itemsFetchData} from '../actions/index';
 import {convertItems} from '../helpers/functions';
 import OrderBookColumns from "./OrderBookColumns";
+import Messages from "./Messages";
+
+const typeBlock = 'OrderBook';
 
 const mapStateToProps = (state) => {
     return {
-        hasErrored: state.socketsHasError,
-        isConnect: state.socketConnecting,
+        hasErrored: state.socketsHasError[typeBlock],
+        isConnect: state.socketConnecting[typeBlock],
         items: state.socketsOnMessageOrderBook
     };
 };
 
 class OrderBookBids extends Component {
     render() {
-        if (this.props.hasErrored) {
-            return <p>Sorry! There was an error loading the items</p>;
-        }
-
-        if (this.props.isConnect) {
-            return <p>Loading…</p>;
+        if (this.props.hasErrored || this.props.isConnect) {
+            return <Messages {...this.props} />;
         }
 
         let items = this.props.items.bids,

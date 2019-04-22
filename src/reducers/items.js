@@ -1,7 +1,18 @@
 export function socketConnecting(state = false, action) {
     switch (action.type) {
         case 'SOCKETS_CONNECTING':
-            return action.isConnect;
+            return {...state, ...{[action.from]: action.isConnect}};
+
+        default:
+            return state;
+    }
+}
+
+
+export function socketsHasError(state = false, action) {
+    switch (action.type) {
+        case 'SOCKETS_HAS_ERROR':
+            return {...state, ...{[action.from]: action.error}};
 
         default:
             return state;
@@ -48,16 +59,6 @@ export function socketsOnMessageRecentTrades(state = {}, action) {
             }
 
             return returns;
-
-        default:
-            return state;
-    }
-}
-
-export function socketsHasError(state = false, action) {
-    switch (action.type) {
-        case 'SOCKETS_HAS_ERROR':
-            return action.error;
 
         default:
             return state;
